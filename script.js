@@ -68,14 +68,24 @@ function operate(operator, num1, num2) {
 
 // function to calculate
 function calculationOperations(value) {
-  awaitingNextValue = true;
-  if (operation) {
-    if (!number2) {
-      return;
+  if ( operation && !number2 ) {
+    operation = value
+  } else {
+    if (number1) {
+      awaitingNextValue = true;
+      if (operation) {
+        if (!number2) {
+          operation = '';
+          return;
+        }
+        operate(operation, Number(number1), Number(number2));
+      } else {
+        operation = value;
+      }
+    } else {
+      operation = '';
     }
-    operate(operation, Number(number1), Number(number2));
   }
-  operation = value;
 }
 
 // EVENT LISTENERS
