@@ -68,21 +68,41 @@ function operate(operator, num1, num2) {
 
 // FUNCTION FOR CALCULATIONS
 function calculationOperations(value) {
-  if (operation) {
-    if (number1 && operation && number2) {
-      operate(operation, Number(number1), Number(number2));
-      operation = value;
-    } else if (number1 && !operation) {
-      operation = value;
-    } else if (number1 && operation && !number2) {
-      awaitingNextValue = true;
-      operation = value;
-    }
+  if (!number1) {
+    value = '';
   } else {
-    operation = value;
-    awaitingNextValue = true;
+    if (operation) {
+      if (number1 && operation && number2) {
+        operate(operation, Number(number1), Number(number2));
+        operation = value;
+      } else if (number1 && !operation) {
+        operation = value;
+      } else if (number1 && operation && !number2) {
+        awaitingNextValue = true;
+        operation = value;
+      }
+    } else {
+      operation = value;
+      awaitingNextValue = true;
+    }
   }
 }
+
+// SIMILAR TO THE ABOVE FUNCTION
+// function calculationOperations(value) {
+//   if (!number1) {
+//     value = '';
+//   } else {
+//     awaitingNextValue = true;
+//     if (operation) {
+//       if (!number2) {
+//         return;
+//       }
+//       operate(operation, Number(number1), Number(number2));
+//     }
+//     operation = value;
+//   }
+// }
 
 // EVENT LISTENERS
 // ADDITION BUTTON
