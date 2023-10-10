@@ -66,54 +66,40 @@ function operate(operator, num1, num2) {
   }
 }
 
+// function to calculate
+function calculationOperations(value) {
+  awaitingNextValue = true;
+  if (operation) {
+    if (!number2) {
+      return;
+    }
+    operate(operation, Number(number1), Number(number2));
+  }
+  operation = value;
+}
+
 // EVENT LISTENERS
+// ADDITION BUTTON
 addBtn.addEventListener('click', () => {
-  awaitingNextValue = true;
-  if (operation) {
-    if (!number2) {
-      return;
-    }
-    operate(operation, Number(number1), Number(number2));
-  }
-  operation = addBtn.value;
+  calculationOperations(addBtn.value);
 });
 
+// SUBTRACTION BUTTON
 subBtn.addEventListener('click', () => {
-  awaitingNextValue = true;
-  if (operation) {
-    if (!number2) {
-      return;
-    }
-    operate(operation, Number(number1), Number(number2));
-  }
-  operation = subBtn.value;
-  console.log(operation);
+  calculationOperations(subBtn.value);
 });
 
+// MULITPLY BUTTON
 multiplyBtn.addEventListener('click', () => {
-  awaitingNextValue = true;
-  if (operation) {
-    if (!number2) {
-      return;
-    }
-    operate(operation, Number(number1), Number(number2));
-  }
-  operation = multiplyBtn.value;
-  console.log(operation);
+  calculationOperations(multiplyBtn.value);
 });
 
+// DIVISION BUTTON
 divideBtn.addEventListener('click', () => {
-  awaitingNextValue = true;
-  if (operation) {
-    if (!number2) {
-      return;
-    }
-    operate(operation, Number(number1), Number(number2));
-  }
-  operation = divideBtn.value;
-  console.log(operation);
+  calculationOperations(divideBtn.value);
 });
 
+// EQUALS BUTTON
 equalsBtn.addEventListener('click', () => {
   awaitingNextValue = true;
   if (!number2) {
@@ -121,17 +107,18 @@ equalsBtn.addEventListener('click', () => {
     return;
   }
   operate(operation, Number(number1), Number(number2));
-  awaitingNextValue = false;
-  number1 = '';
+  number1 = display.textContent;
   number2 = '';
   operation = '';
 });
 
+// CLEARS ALL DATA
 clearBtn.addEventListener('click', () => {
   awaitingNextValue = false;
   display.textContent = '';
   number1 = '';
   number2 = '';
+  operation = '';
 });
 
 numberBtns.forEach((button) => {
@@ -142,38 +129,52 @@ numberBtns.forEach((button) => {
 
 function displayScreen(button) {
   function getFirst() {
+    // WE CHECK FOR TRUTHINESS TO DETERMINE WHETHER TO SET number1 VALUE TO AN EMPTY STRING OR TO THE CURRENT VALUE IN THE DISPLAY
+    if (awaitingNextValue) {
+      number1 = '';
+      awaitingNextValue = false;
+    }
     number1 += button.value;
     display.textContent = number1;
   }
-
   function getSecond() {
     number2 += button.value;
     display.textContent = number2;
   }
-
-  if (awaitingNextValue) {
+  // BOTH AWAITINGVALUE AND OPERATION HAVE TO BE TRUE FOR THE SECOND VALUE FN TO BE CALLED
+  if (awaitingNextValue && operation) {
     getSecond();
   } else {
     getFirst();
   }
-  console.log(number1, number2);
 }
 
 function decimal() {
-  number1 = String(number1);
-  number2 = String(number2);
-  if (!number1.includes('.')) {
-    number1 += decimalBtn.value;
-    display.textContent = number1;
-  } else if (!number2.includes('.')) {
-    number2 += decimalBtn.value;
+  // CHECK IF THE OPERATION IS TRUTHY: THIS MEANS THERE IS A FIRST VALUE STORED ALREADY ELSE: THE FIRST VALUE IS NONE EXISTENT THUS PERFORM THE SECOND CONDITION
+  if (operation) {
+    if (!number2.includes('.')) {
+      number2 += decimalBtn.value;
+    }
+    if (number2 === '.') {
+      number2 = '0.';
+    }
     display.textContent = number2;
   } else {
-    decimalBtn.value = '';
+    if (awaitingNextValue) {
+      number1 = '';
+      awaitingNextValue = false;
+    }
+    // IF FALSY ADD THE DECIMAL POINT ONLY ONCE
+    if (!number1.includes('.')) {
+      number1 += decimalBtn.value;
+    }
+    // FOR VALUES LESS THAN ONE TO DISPLAY "0"
+    if (number1 === '.') {
+      number1 = '0.';
+    }
+    display.textContent = number1;
   }
-
-  decimal.value = '.';
-  console.log(decimalBtn.value);
+  console.log(number1, number2);
 }
 
 decimalBtn.addEventListener('click', decimal);
