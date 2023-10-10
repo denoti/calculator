@@ -66,25 +66,21 @@ function operate(operator, num1, num2) {
   }
 }
 
-// function to calculate
+// FUNCTION FOR CALCULATIONS
 function calculationOperations(value) {
-  if ( operation && !number2 ) {
-    operation = value
-  } else {
-    if (number1) {
+  if (operation) {
+    if (number1 && operation && number2) {
+      operate(operation, Number(number1), Number(number2));
+      operation = value;
+    } else if (number1 && !operation) {
+      operation = value;
+    } else if (number1 && operation && !number2) {
       awaitingNextValue = true;
-      if (operation) {
-        if (!number2) {
-          operation = '';
-          return;
-        }
-        operate(operation, Number(number1), Number(number2));
-      } else {
-        operation = value;
-      }
-    } else {
-      operation = '';
+      operation = value;
     }
+  } else {
+    operation = value;
+    awaitingNextValue = true;
   }
 }
 
@@ -157,6 +153,7 @@ function displayScreen(button) {
   } else {
     getFirst();
   }
+  console.log(number1, number2);
 }
 
 function decimal() {
